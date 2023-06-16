@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class ZeroSumSubsetFinder {
+    private int[] nums;
+
+    public ZeroSumSubsetFinder(int[] nums) {
+        this.nums = nums;
+    }
+
+    public List<Integer> findZeroSumSubset() {
+        List<Integer> result = new ArrayList<>();
+        findSubset(0, 0, result);
+        return result;
+    }
+
+    private boolean findSubset(int index, int sum, List<Integer> subset) {
+        if (sum == 0 && !subset.isEmpty()) {
+            return true;
+        }
+
+        if (index >= nums.length) {
+            return false;
+        }
+
+        // Include the current element in the subset and check if it leads to a zero sum
+        subset.add(nums[index]);
+        if (findSubset(index + 1, sum + nums[index], subset)) {
+            return true;
+        }
+        subset.remove(subset.size() - 1);
+
+        // Exclude the current element from the subset and check if it leads to a zero sum
+        if (findSubset(index + 1, sum, subset)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int[] nums = new int[n];
+        for(int i=0;i<n;i++){
+            nums[i]=sc.nextInt();
+        }
+        ZeroSumSubsetFinder finder = new ZeroSumSubsetFinder(nums);
+        List<Integer> zeroSumSubset = finder.findZeroSumSubset();
+
+        if (zeroSumSubset.isEmpty()) {
+            System.out.println("No Elements found");
+        } else {
+            System.out.println("Zero sum subset:");
+            for (int num : zeroSumSubset) {
+                System.out.print(num + " ");
+            }
+        }
+    }
+}
